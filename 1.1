@@ -1,0 +1,77 @@
+var express = require('express');
+var app = express();
+var fs = require('fs');
+
+
+// Sample data for coding
+const usersData = {
+   'user1': {
+    'name': 'Alice',
+    'id': 56789,
+    'age': 25,
+    'profession': 'Software Engineer'
+  },
+  'user2': {
+    'name': 'Bob',
+    'id': 56790,
+    'age': 30,
+    'profession': 'Data Analyst'
+  },
+  'user3': {
+    'name': 'Eve',
+    'id': 56791,
+    'age': 27,
+    'profession': 'Designer'
+  }
+};
+
+// Endpoint to list users
+app.get('/listusers', function (req, res) {
+  res.json(usersData);
+});
+
+// Endpoint to add a new user
+app.post('/addUser', function (req, res) {
+  const newUser = {
+    'user4': {
+      'name': 'Charlie',
+      'id': 56792,
+      'age': 22,
+      'profession': 'Teacher'
+    }
+  };
+
+  usersData['user4'] = newUser['user4'];
+  res.json(usersData);
+});
+
+// Endpoint to get user by ID
+app.get('/:id', function (req, res) {
+  const userId = req.params.id;
+  const user = Object.values(usersData).find(user => user.id == userId);
+
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(404).send('User not found');
+  }
+});
+
+// Endpoint to delete a user
+app.delete('/deleteuser/:id', function (req, res) {
+  const userId = req.params.id;
+
+  if (usersData['user' + userId]) {
+    delete usersData['user' + userId];
+    res.json(usersData);
+  } else {
+    res.status(404).send('User not found');
+  }
+});
+
+//to start server
+var server = app.listen(8080, function () {
+  var host = server.address().address;
+  var port = server.address().port;
+  console.log('Example app listening at http://%s:%s', host, port);
+});
